@@ -49,27 +49,26 @@ def getPDFs(dpath,sub, fpath):
             
     #iterate through currently made images and write details to file
     pngs = glob.glob(os.path.join(dpath, sub, 'pdfs', '*png'))
-    
     for png in pngs:
         print(png)
         name = pdf.split('/')
         for word in name:  
-            if '.pdf' in word:
+            if '.png' in word:
                 filename = word.split('.')[0]
-        svg = ImageReader(png)
+                print(filename)
                 
       
         c = canvas.Canvas("mypdf.pdf", pagesize=letter)
         c.setFont('Helvetica', 20)
         c.drawString(30, 750, "FILENAME: %s"%filename )
-        c.drawImage(svg, 10,10)
+        c.drawInlineImage(png, 30,300, 570,420.89)
         c.showPage()
         c.save()
         
         
 def main():
     global basepath
-    basepath= '/Users/nikkibytes/Documents/BevBits'
+    basepath= '/Users/nikkibytes/Documents/quality_control/BevBits'
     deriv_path = os.path.join(basepath, 'derivatives')
     fmriprep_path = os.path.join(basepath, 'fmriprep')
     
@@ -79,7 +78,6 @@ def main():
         for w in words:
             if 'sub-' in w:
                 sub = w
-        print(w)
         getPDFs(deriv_path, sub, fmriprep_path)
         #mergePDFS(sub)
 main()
