@@ -43,7 +43,7 @@ def getPDFs(dpath,sub, fpath):
                 out=os.path.join(dpath, sub, 'pdfs', filename) #output pdf filename
                 
                 #cairosvg.svg2png(url=img, write_to=out) #convert svg 
-                
+            
             
                 
             
@@ -51,21 +51,28 @@ def getPDFs(dpath,sub, fpath):
     pngs = glob.glob(os.path.join(dpath, sub, 'pdfs', '*png'))
     for png in pngs:
         print(png)
-        name = pdf.split('/')
+        name = png.split('/')
         for word in name:  
             if '.png' in word:
                 filename = word.split('.')[0]
-                print(filename)
-                
-      
+                #print(filename)
+        """
         c = canvas.Canvas("mypdf.pdf", pagesize=letter)
         c.setFont('Helvetica', 20)
+        
         c.drawString(30, 750, "FILENAME: %s"%filename )
-        c.drawInlineImage(png, 30,300, 570,420.89)
+        drawing = svg2rlg(png)
+        
+        scaleFactor = 1/0.3527
+        drawing.width *= scaleFactor
+        drawing.height *= scaleFactor
+        drawing.scale(scaleFactor, scaleFactor)
+        renderPDF.drawToFile(drawing, c, 0, 40)
+       # c.drawInlineImage(png, 30,300, 570,420.89)
         c.showPage()
         c.save()
-        
-        
+        """
+      
 def main():
     global basepath
     basepath= '/Users/nikkibytes/Documents/quality_control/BevBits'
