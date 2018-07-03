@@ -17,6 +17,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg
+from reportlab.lib.utils import ImageReader
 
 
 
@@ -41,44 +42,30 @@ def getPDFs(dpath,sub, fpath):
                 filename=word+'.png'
                 out=os.path.join(dpath, sub, 'pdfs', filename) #output pdf filename
                 
-                cairosvg.svg2png(url=img, write_to=out) #convert svg 
+                #cairosvg.svg2png(url=img, write_to=out) #convert svg 
                 
-    
+            
+                
             
     #iterate through currently made images and write details to file
     pngs = glob.glob(os.path.join(dpath, sub, 'pdfs', '*png'))
     
     for png in pngs:
-       
+        print(png)
         name = pdf.split('/')
         for word in name:  
             if '.pdf' in word:
                 filename = word.split('.')[0]
+        svg = ImageReader(png)
                 
-        with open(png, 'rb') as f:
-            image = f.read()
-            
-        with open('fileXX.doc', 'wb') as f:
-            f.write(image)
-            f.close
-                
-        packet = io.BytesIO()
-        c = canvas.Canvas(packet, pagesize=letter)
-        c.drawString(10,100, "Filename: %s"%filename)
+      
+        c = canvas.Canvas("mypdf.pdf", pagesize=letter)
+        c.setFont('Helvetica', 20)
+        c.drawString(30, 750, "FILENAME: %s"%filename )
+        c.drawImage(svg, 10,10)
+        c.showPage()
         c.save()
-        packet.seek(0)
-        input = PdfFileReader(packet)
         
-        orig_pdf = PdfFileReader(open(pdf, "rb"))
-        output = PdfFileWriter()
-        
-        page = orig_pdf.getPage(0)
-        page.mergePage(input.getPage(0))
-        output.addPage(page)
-        # finally, write "output" to a real file
-        outputStream = open("destination.pdf", "wb")
-        output.write(outputStream)
-        outputStream.close()
         
 def main():
     global basepath
