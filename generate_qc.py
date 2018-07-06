@@ -18,6 +18,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg
 from reportlab.lib.utils import ImageReader
+from reportlab.lib.units import inch
 
 
 
@@ -55,23 +56,19 @@ def getPDFs(dpath,sub, fpath):
         for word in name:  
             if '.png' in word:
                 filename = word.split('.')[0]
-                #print(filename)
-        """
+                print(filename)
+        
         c = canvas.Canvas("mypdf.pdf", pagesize=letter)
         c.setFont('Helvetica', 20)
-        
+
         c.drawString(30, 750, "FILENAME: %s"%filename )
-        drawing = svg2rlg(png)
         
-        scaleFactor = 1/0.3527
-        drawing.width *= scaleFactor
-        drawing.height *= scaleFactor
-        drawing.scale(scaleFactor, scaleFactor)
-        renderPDF.drawToFile(drawing, c, 0, 40)
-       # c.drawInlineImage(png, 30,300, 570,420.89)
+       
+        
+        c.drawImage(png, inch, height-2 * inch )
         c.showPage()
         c.save()
-        """
+    
       
 def main():
     global basepath
